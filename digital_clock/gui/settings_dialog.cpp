@@ -219,6 +219,9 @@ void SettingsDialog::InitControls()
   ui->clock_url_enabled->setChecked(config_->GetValue(OPT_CLOCK_URL_ENABLED).toBool());
   ui->clock_url_edit->setText(config_->GetValue(OPT_CLOCK_URL_STRING).toString());
 
+  ui->fullscreen_detect->setChecked(config_->GetValue(OPT_FULLSCREEN_DETECT).toBool());
+  ui->all_workspaces->setChecked(config_->GetValue(OPT_SHOW_ON_ALL_DESKTOPS).toBool());
+
   // "Plugins" tab
   active_plugins_ = config_->GetValue(OPT_PLUGINS).toStringList();
   for (int i = 0; i < ui->plugins_list->count(); i++) {
@@ -489,4 +492,14 @@ void digital_clock::gui::SettingsDialog::on_browse_url_file_btn_clicked()
 {
   QUrl url = QFileDialog::getOpenFileUrl(this);
   if (url.isValid()) ui->clock_url_edit->setText(url.toString());
+}
+
+void digital_clock::gui::SettingsDialog::on_all_workspaces_clicked(bool checked)
+{
+  emit OptionChanged(OPT_SHOW_ON_ALL_DESKTOPS, checked);
+}
+
+void digital_clock::gui::SettingsDialog::on_fullscreen_detect_clicked(bool checked)
+{
+  emit OptionChanged(OPT_FULLSCREEN_DETECT, checked);
 }

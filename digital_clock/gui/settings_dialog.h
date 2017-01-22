@@ -111,6 +111,8 @@ private slots:
   void on_clock_url_enabled_toggled(bool checked);
   void on_clock_url_edit_textChanged(const QString& arg1);
   void on_browse_url_file_btn_clicked();
+  void on_all_workspaces_clicked(bool checked);
+  void on_fullscreen_detect_clicked(bool checked);
 
 private:
   Ui::SettingsDialog* ui;

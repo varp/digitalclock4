@@ -106,6 +106,7 @@ private:
   QColor bg_color_;
 
   bool last_visibility_;
+  bool fullscreen_detect_enabled_;
 };
 
 } // namespace digital_clock

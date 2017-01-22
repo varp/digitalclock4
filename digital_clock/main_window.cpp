@@ -69,7 +69,6 @@ MainWindow::MainWindow(QWidget* parent) : QWidget(parent, Qt::Window)
   setWindowFlags(windowFlags() | Qt::Tool);
 #endif
   setAttribute(Qt::WA_TranslucentBackground);
-  SetVisibleOnAllDesktops(true);
 
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, &MainWindow::customContextMenuRequested, this, &MainWindow::ShowContextMenu);
@@ -109,6 +108,7 @@ MainWindow::MainWindow(QWidget* parent) : QWidget(parent, Qt::Window)
   adjustSize();
 
   last_visibility_ = true;
+  fullscreen_detect_enabled_ = false;
 
   InitPluginSystem();
   Reset();
@@ -168,8 +168,10 @@ void MainWindow::Reset()
 {
   // widnow settings
   ApplyOption(OPT_OPACITY, app_config_->GetValue(OPT_OPACITY));
+  ApplyOption(OPT_FULLSCREEN_DETECT, app_config_->GetValue(OPT_FULLSCREEN_DETECT));
   ApplyOption(OPT_STAY_ON_TOP, app_config_->GetValue(OPT_STAY_ON_TOP));
   ApplyOption(OPT_TRANSP_FOR_INPUT, app_config_->GetValue(OPT_TRANSP_FOR_INPUT));
+  ApplyOption(OPT_SHOW_ON_ALL_DESKTOPS, app_config_->GetValue(OPT_SHOW_ON_ALL_DESKTOPS));
   ApplyOption(OPT_ALIGNMENT, app_config_->GetValue(OPT_ALIGNMENT));
   ApplyOption(OPT_BACKGROUND_COLOR, app_config_->GetValue(OPT_BACKGROUND_COLOR));
   ApplyOption(OPT_BACKGROUND_ENABLED, app_config_->GetValue(OPT_BACKGROUND_ENABLED));
@@ -215,12 +217,20 @@ void MainWindow::ApplyOption(const Option opt, const QVariant& value)
       setWindowOpacity(value.toReal());
       break;
 
+    case OPT_FULLSCREEN_DETECT:
+      fullscreen_detect_enabled_ = value.toBool();
+      break;
+
     case OPT_STAY_ON_TOP:
       SetWindowFlag(Qt::WindowStaysOnTopHint, value.toBool());
       break;
 
     case OPT_TRANSP_FOR_INPUT:
       SetWindowFlag(Qt::WindowTransparentForInput, value.toBool());
+      break;
+
+    case OPT_SHOW_ON_ALL_DESKTOPS:
+      SetVisibleOnAllDesktops(value.toBool());
       break;
 
     case OPT_ALIGNMENT:
@@ -376,7 +386,7 @@ void MainWindow::Update()
   // https://sourceforge.net/p/digitalclock4/tickets/3/
   // https://sourceforge.net/p/digitalclock4/tickets/9/
   if (app_config_->GetValue(OPT_STAY_ON_TOP).toBool()) {
-    if (IsFullscreenWndOnSameMonitor(this->winId())) {
+    if (fullscreen_detect_enabled_ && IsFullscreenWndOnSameMonitor(this->winId())) {
       if (this->windowFlags() & Qt::WindowStaysOnTopHint) {
         this->SetWindowFlag(Qt::WindowStaysOnTopHint, false);
         this->lower();
