@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget* parent) : QWidget(parent, Qt::Window)
 #ifdef Q_OS_MACOS
   setWindowFlags(windowFlags() | Qt::NoDropShadowWindowHint);
 #else
-  setWindowFlags(windowFlags() | Qt::Tool | Qt::X11BypassWindowManagerHint);
+  setWindowFlags(windowFlags() | Qt::Tool);
 #endif
   setAttribute(Qt::WA_TranslucentBackground);
   SetVisibleOnAllDesktops(true);
@@ -490,7 +490,7 @@ void MainWindow::SetVisibleOnAllDesktops(bool set)
   int NSWindowCollectionBehaviorCanJoinAllSpaces = set ? 1 << 0 : 0 << 0;
   objc_msgSend(nsWindowObject, sel_registerName("setCollectionBehavior:"), NSWindowCollectionBehaviorCanJoinAllSpaces);
 #elif defined(Q_OS_LINUX)
-  unsigned long data = 0xFFFFFFFF;
+  unsigned int data = set ? 0xFFFFFFFF : 0x00000000;
   XChangeProperty (QX11Info::display(),
                    winId(),
                    XInternAtom(QX11Info::display(), "_NET_WM_DESKTOP", False),
