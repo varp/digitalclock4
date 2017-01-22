@@ -4,29 +4,29 @@
 <context>
     <name>digital_clock::MainWindow</name>
     <message>
-        <location filename="../main_window.cpp" line="422"/>
         <location filename="../main_window.cpp" line="432"/>
         <location filename="../main_window.cpp" line="442"/>
+        <location filename="../main_window.cpp" line="452"/>
         <source>%1 Update</source>
         <translation>Обновление %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cpp" line="423"/>
+        <location filename="../main_window.cpp" line="433"/>
         <source>Update error. %1</source>
         <translation>Ошибка обновления. %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cpp" line="433"/>
+        <location filename="../main_window.cpp" line="443"/>
         <source>You already have latest version (%1).</source>
         <translation>У Вас установлена последния версия (%1).</translation>
     </message>
     <message>
-        <location filename="../main_window.cpp" line="443"/>
+        <location filename="../main_window.cpp" line="453"/>
         <source>Update available (%1). Click this message to download.</source>
         <translation>Доступно обновление (%1). Щелкните здесь чтобы начать загрузку.</translation>
     </message>
     <message>
-        <location filename="../main_window.cpp" line="455"/>
+        <location filename="../main_window.cpp" line="465"/>
         <source>%1 Error</source>
         <translation>%1 - Ошибка</translation>
     </message>
@@ -376,58 +376,78 @@
         <translation>Выбрать локальный файл вместо URL</translation>
     </message>
     <message>
+        <location filename="../gui/settings_dialog.ui" line="820"/>
+        <source>prevent appearing above fullscreen windows</source>
+        <translation>не появляться поверх полноэкранных окон</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="827"/>
+        <source>display &apos;Show/Hide&apos; menu item</source>
+        <translation>показывать пункт меню &quot;Показать/Скрыть&quot;</translation>
+    </message>
+    <message>
         <location filename="../gui/settings_dialog.ui" line="834"/>
+        <source>show on all workspaces / virtual desktops</source>
+        <translation>показывать на всех рабочих столах</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="841"/>
+        <source>export state (e.g. position)</source>
+        <translation>экспортировать состояние (т.е. позицию)</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="849"/>
         <source>Plugins</source>
         <translation>Плагины</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="201"/>
+        <location filename="../gui/settings_dialog.cpp" line="209"/>
         <source>1 day</source>
         <translation>1 день</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="202"/>
+        <location filename="../gui/settings_dialog.cpp" line="210"/>
         <source>3 days</source>
         <translation>3 дня</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="203"/>
+        <location filename="../gui/settings_dialog.cpp" line="211"/>
         <source>1 week</source>
         <translation>1 неделя</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="204"/>
+        <location filename="../gui/settings_dialog.cpp" line="212"/>
         <source>2 weeks</source>
         <translation>2 недели</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="102"/>
+        <location filename="../gui/settings_dialog.cpp" line="110"/>
         <source>unknown</source>
         <translation>неизвестно</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="302"/>
+        <location filename="../gui/settings_dialog.cpp" line="313"/>
         <source>Open texture file</source>
         <translation>Открыть файл текстуры</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="304"/>
+        <location filename="../gui/settings_dialog.cpp" line="315"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.tiff *.xbm *.xpm)</source>
         <translation>Картинки (*.bmp *.jpg *.jpeg *.png *.tiff *.xbm *.xpm)</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="387"/>
+        <location filename="../gui/settings_dialog.cpp" line="398"/>
         <source>Export settings to ...</source>
         <translation>Экспортировать настройки в ...</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="389"/>
-        <location filename="../gui/settings_dialog.cpp" line="397"/>
+        <location filename="../gui/settings_dialog.cpp" line="400"/>
+        <location filename="../gui/settings_dialog.cpp" line="408"/>
         <source>Digital Clock settings files (*.dcs)</source>
         <translation>файлы конфигурации Digital Clock</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="395"/>
+        <location filename="../gui/settings_dialog.cpp" line="406"/>
         <source>Import settings from ...</source>
         <translation>Импортировать настройки из ...</translation>
     </message>
