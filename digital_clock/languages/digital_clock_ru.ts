@@ -52,6 +52,11 @@
         <translation>Информация</translation>
     </message>
     <message>
+        <location filename="../gui/about_dialog.ui" line="145"/>
+        <source>© 2013-2017 Nick Korotysh</source>
+        <translation>© 2013-2017 Николай Коротыш</translation>
+    </message>
+    <message>
         <location filename="../gui/about_dialog.ui" line="156"/>
         <source>Links</source>
         <translation>Ссылки</translation>
@@ -93,7 +98,7 @@
         <translation>версия: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../gui/about_dialog.cpp" line="76"/>
+        <location filename="../gui/about_dialog.cpp" line="75"/>
         <source>build date: %1</source>
         <translatorcomment>дата компиляции приложения</translatorcomment>
         <translation>дата сборки: %1</translation>
