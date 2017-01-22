@@ -61,6 +61,14 @@ SettingsDialog::SettingsDialog(core::ClockSettings* config, core::ClockState* st
 
   ui->skin_info_btn->setVisible(false);  // temporary, not implemented
   ui->defaults_bth->setVisible(false);   // temporary, not implemented
+  ui->show_hide_enable->setVisible(false);  // temporary, not implemented
+  ui->export_state->setVisible(false);   // temporary, not implemented
+#if defined(Q_OS_WIN)
+  ui->all_workspaces->setVisible(false);      // not supported for Windows
+#endif
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
+  ui->fullscreen_detect->setVisible(false);   // not supported for Linux/Mac
+#endif
 
   connect(config->GetBackend(), &SettingsStorage::reloaded, this, &SettingsDialog::InitControls);
 
