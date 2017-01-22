@@ -46,11 +46,6 @@
 #ifdef Q_OS_MACOS
 #include <objc/objc-runtime.h>
 #endif
-#ifdef Q_OS_LINUX
-#include <QX11Info>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#endif
 #ifdef Q_OS_WIN
 #include "platform/fullscreen_detect.h"
 #endif
@@ -69,6 +64,7 @@ MainWindow::MainWindow(QWidget* parent) : QWidget(parent, Qt::Window)
   setWindowFlags(windowFlags() | Qt::Tool);
 #endif
   setAttribute(Qt::WA_TranslucentBackground);
+  SetVisibleOnAllDesktops(true);
 
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, &MainWindow::customContextMenuRequested, this, &MainWindow::ShowContextMenu);
@@ -171,7 +167,6 @@ void MainWindow::Reset()
   ApplyOption(OPT_FULLSCREEN_DETECT, app_config_->GetValue(OPT_FULLSCREEN_DETECT));
   ApplyOption(OPT_STAY_ON_TOP, app_config_->GetValue(OPT_STAY_ON_TOP));
   ApplyOption(OPT_TRANSP_FOR_INPUT, app_config_->GetValue(OPT_TRANSP_FOR_INPUT));
-  ApplyOption(OPT_SHOW_ON_ALL_DESKTOPS, app_config_->GetValue(OPT_SHOW_ON_ALL_DESKTOPS));
   ApplyOption(OPT_ALIGNMENT, app_config_->GetValue(OPT_ALIGNMENT));
   ApplyOption(OPT_BACKGROUND_COLOR, app_config_->GetValue(OPT_BACKGROUND_COLOR));
   ApplyOption(OPT_BACKGROUND_ENABLED, app_config_->GetValue(OPT_BACKGROUND_ENABLED));
@@ -222,15 +217,11 @@ void MainWindow::ApplyOption(const Option opt, const QVariant& value)
       break;
 
     case OPT_STAY_ON_TOP:
-      SetWindowFlag(Qt::WindowStaysOnTopHint, value.toBool());
+      SetWindowFlag(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint, value.toBool());
       break;
 
     case OPT_TRANSP_FOR_INPUT:
       SetWindowFlag(Qt::WindowTransparentForInput, value.toBool());
-      break;
-
-    case OPT_SHOW_ON_ALL_DESKTOPS:
-      SetVisibleOnAllDesktops(value.toBool());
       break;
 
     case OPT_ALIGNMENT:
@@ -499,16 +490,6 @@ void MainWindow::SetVisibleOnAllDesktops(bool set)
   objc_object* nsWindowObject = objc_msgSend(nsviewObject, sel_registerName("window"));
   int NSWindowCollectionBehaviorCanJoinAllSpaces = set ? 1 << 0 : 0 << 0;
   objc_msgSend(nsWindowObject, sel_registerName("setCollectionBehavior:"), NSWindowCollectionBehaviorCanJoinAllSpaces);
-#elif defined(Q_OS_LINUX)
-  unsigned int data = set ? 0xFFFFFFFF : 0x00000000;
-  XChangeProperty (QX11Info::display(),
-                   winId(),
-                   XInternAtom(QX11Info::display(), "_NET_WM_DESKTOP", False),
-                   XA_CARDINAL,
-                   32,
-                   PropModeReplace,
-                   reinterpret_cast<unsigned char*>(&data),  // all desktop
-                   1);
 #else
   Q_UNUSED(set)
 #endif
