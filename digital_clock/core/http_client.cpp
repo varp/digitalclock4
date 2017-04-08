@@ -23,6 +23,9 @@
 #ifdef Q_OS_LINUX
 #include <QSysInfo>
 #endif
+#include "logger.h"
+
+CLOCK_LOGGING_CATEGORY(clock_core_updater, "clock.core.updater")
 
 namespace digital_clock {
 namespace core {
@@ -32,15 +35,19 @@ HttpClient::HttpClient(QObject* parent) :
   reply_(nullptr),
   is_running_(false)
 {
+  cTraceFunction(clock_core_updater);
 }
 
 HttpClient::~HttpClient()
 {
+  cTraceFunction(clock_core_updater);
+  qCDebug(clock_core_updater) << "is http client running on destroy:" << is_running_;
   if (is_running_) cancel();
 }
 
 void HttpClient::startRequest(QUrl url)
 {
+  cTraceFunction(clock_core_updater);
   url_ = url;
   is_running_ = true;
   QNetworkRequest req(url);
@@ -68,16 +75,19 @@ void HttpClient::startRequest(QUrl url)
 
 bool HttpClient::isRunning() const
 {
+  cTraceFunction(clock_core_updater);
   return is_running_;
 }
 
 void HttpClient::cancel()
 {
+  cTraceFunction(clock_core_updater);
   if (is_running_) reply_->abort();
 }
 
 void HttpClient::httpFinished()
 {
+  cTraceSlot(clock_core_updater);
   QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
   if (reply_->error()) {
     emit ErrorMessage(reply_->errorString());
@@ -100,6 +110,7 @@ void HttpClient::httpFinished()
 
 void HttpClient::httpReadyRead()
 {
+  cTraceSlot(clock_core_updater);
   // this slot gets called every time the QNetworkReply has new data.
   if (reply_->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
     emit DataDownloaded(reply_->readAll());

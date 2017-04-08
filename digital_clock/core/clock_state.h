@@ -30,6 +30,7 @@ class ClockState : public SettingsStorageWrapper
 
 public:
   explicit ClockState(SettingsStorage* backend, QObject* parent = nullptr);
+  ~ClockState();
 
   void SetVariable(const QString& key, const QVariant& value, bool commit = true);
   QVariant GetVariable(const QString& key, const QVariant& default_value = QVariant());

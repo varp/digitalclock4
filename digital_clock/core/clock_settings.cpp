@@ -25,16 +25,26 @@
 #include <QApplication>
 
 #include "settings_keys.h"
+#include "logger.h"
+
+CLOCK_LOGGING_CATEGORY(clock_core_config, "clock.core.config")
 
 namespace digital_clock {
 namespace core {
 
 ClockSettings::ClockSettings(SettingsStorage* backend, QObject* parent) : ConfigBase(backend, parent)
 {
+  cTraceFunction(clock_core_config);
+}
+
+ClockSettings::~ClockSettings()
+{
+  cTraceFunction(clock_core_config);
 }
 
 QMap<Option, QVariant> ClockSettings::GetSettings() const
 {
+  cTraceFunction(clock_core_config);
   QMap<Option, QVariant> all_settings;
   all_settings[OPT_OPACITY]               = GetValue(OPT_OPACITY);
   all_settings[OPT_STAY_ON_TOP]           = GetValue(OPT_STAY_ON_TOP);
@@ -76,6 +86,7 @@ QMap<Option, QVariant> ClockSettings::GetSettings() const
 
 QString ClockSettings::GetKey(const int id) const
 {
+  cTraceFunction(clock_core_config);
   switch (static_cast<Option>(id)) {
     // clock settings
     case OPT_OPACITY:               return "clock/opacity";
@@ -117,12 +128,14 @@ QString ClockSettings::GetKey(const int id) const
     case OPT_EXPORT_STATE:          return "misc/export_state";
     case OPT_KEEP_ALWAYS_VISIBLE:   return "window/always_visible";
   }
+  qCCritical(clock_core_config) << "settings key was not found, id:" << id;
   Q_ASSERT(false);
   return QString();
 }
 
 QVariant ClockSettings::GetDefaultValue(const int id) const
 {
+  cTraceFunction(clock_core_config);
   switch (static_cast<Option>(id)) {
     // clock settings
     case OPT_OPACITY:               return 0.75;
@@ -164,6 +177,7 @@ QVariant ClockSettings::GetDefaultValue(const int id) const
     case OPT_EXPORT_STATE:          return true;
     case OPT_KEEP_ALWAYS_VISIBLE:   return false;
   }
+  qCWarning(clock_core_config) << "no default value for option, id:" << id;
   return QVariant();
 }
 

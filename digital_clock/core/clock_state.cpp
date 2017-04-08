@@ -19,17 +19,27 @@
 #include "clock_state.h"
 
 #include "settings_storage.h"
+#include "logger.h"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_core_config)
 
 namespace digital_clock {
 namespace core {
 
 ClockState::ClockState(SettingsStorage* backend, QObject* parent) : SettingsStorageWrapper(backend, parent)
 {
+  cTraceFunction(clock_core_config);
   is_exportable_ = true;
+}
+
+ClockState::~ClockState()
+{
+  cTraceFunction(clock_core_config);
 }
 
 void ClockState::SetVariable(const QString& key, const QVariant& value, bool commit)
 {
+  cTraceFunction(clock_core_config);
   QString full_key = AddKeyPrefix(key);
   state_keys_.insert(full_key);
   SettingsStorageWrapper::setValue(full_key, value);
@@ -39,6 +49,7 @@ void ClockState::SetVariable(const QString& key, const QVariant& value, bool com
 
 QVariant ClockState::GetVariable(const QString& key, const QVariant& default_value)
 {
+  cTraceFunction(clock_core_config);
   QString full_key = AddKeyPrefix(key);
   state_keys_.insert(full_key);
   QVariant value = SettingsStorageWrapper::getValue(full_key, default_value);
@@ -48,6 +59,7 @@ QVariant ClockState::GetVariable(const QString& key, const QVariant& default_val
 
 void ClockState::SetExportable(bool exportable)
 {
+  cTraceFunction(clock_core_config);
   if (exportable) {
     for (auto& key : state_keys_) GetBackend()->GetValue(key);
   } else {
@@ -58,11 +70,13 @@ void ClockState::SetExportable(bool exportable)
 
 bool ClockState::IsExportable() const
 {
+  cTraceFunction(clock_core_config);
   return is_exportable_;
 }
 
 QString ClockState::AddKeyPrefix(const QString& key)
 {
+  cTraceFunction(clock_core_config);
   return QString("%1/%2").arg("state", key);
 }
 

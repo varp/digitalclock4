@@ -38,6 +38,8 @@ class SkinManager : public QObject
 
 public:
   explicit SkinManager(QObject* parent = 0);
+  ~SkinManager();
+
   ClockSkinPtr CurrentSkin() const;
 
 signals:

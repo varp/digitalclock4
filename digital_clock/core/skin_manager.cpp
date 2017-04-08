@@ -21,9 +21,13 @@
 #include <QDir>
 #include <QApplication>
 
+#include "logger.h"
+
 #include "skin/clock_raster_skin.h"
 #include "skin/clock_vector_skin.h"
 #include "skin/clock_text_skin.h"
+
+CLOCK_LOGGING_CATEGORY(clock_core_skins, "clock.core.skin")
 
 namespace digital_clock {
 namespace core {
@@ -47,6 +51,7 @@ ClockSkinPtr CreateSkin(const QFont& font)
 
 SkinManager::SkinManager(QObject* parent) : QObject(parent)
 {
+  cTraceFunction(clock_core_skins);
   search_paths_.append(":/clock/default_skins");
 #ifdef Q_OS_MACOS
   search_paths_.append(qApp->applicationDirPath() + "/../Resources/skins");
@@ -58,15 +63,23 @@ SkinManager::SkinManager(QObject* parent) : QObject(parent)
   search_paths_.append("/usr/local/share/digital_clock/skins");
   search_paths_.append(QDir::homePath() + "/.local/share/digital_clock/skins");
 #endif
+  qCDebug(clock_core_skins) << "search paths:" << search_paths_;
+}
+
+SkinManager::~SkinManager()
+{
+  cTraceFunction(clock_core_skins);
 }
 
 ClockSkinPtr SkinManager::CurrentSkin() const
 {
+  cTraceFunction(clock_core_skins);
   return current_skin_;
 }
 
 void SkinManager::ListSkins()
 {
+  cTraceSlot(clock_core_skins);
   skins_.clear();
   for (auto& s_path : search_paths_) {
     QDir s_dir(s_path);
@@ -84,16 +97,20 @@ void SkinManager::ListSkins()
 
 void SkinManager::LoadSkin(const QString& skin_name)
 {
+  cTraceSlot(clock_core_skins);
   ClockSkinPtr skin;
+  qCDebug(clock_core_skins) << "loading skin:" << skin_name;
   if (skin_name == "Text Skin") {
     skin = CreateSkin(font_);
   } else {
     skin = CreateSkin(skins_[skin_name]);
   }
   if (!skin && !fallback_skin_.isEmpty()) {
+    qCWarning(clock_core_skins) << "using fallback skin:" << fallback_skin_;
     emit ErrorMessage(tr("Skin '%1' is not loaded, using default skin.").arg(skin_name));
     skin = CreateSkin(skins_[fallback_skin_]);
   }
+  if (!skin) qCCritical(clock_core_skins) << "no skin was loaded";
   current_skin_ = skin;
   SetSeparators(seps_);
   emit SkinLoaded(skin.dynamicCast<skin_draw::ISkin>());
@@ -105,6 +122,7 @@ void SkinManager::LoadSkin(const QString& skin_name)
 
 void SkinManager::SetFont(const QFont& font)
 {
+  cTraceSlot(clock_core_skins);
   font_ = font;
   // update text skin if needed
   if (current_skin_.dynamicCast<TextSkin>()) LoadSkin("Text Skin");
@@ -112,12 +130,14 @@ void SkinManager::SetFont(const QFont& font)
 
 void SkinManager::SetSeparators(const QString& seps)
 {
+  cTraceSlot(clock_core_skins);
   seps_ = seps;
   if (current_skin_) current_skin_->SetSeparators(seps);
 }
 
 void SkinManager::SetFallbackSkin(const QString& skin_name)
 {
+  cTraceSlot(clock_core_skins);
   fallback_skin_ = skin_name;
 }
 

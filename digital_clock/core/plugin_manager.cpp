@@ -25,17 +25,21 @@
 #include <QPluginLoader>
 
 #include "iplugin_init.h"
+#include "logger.h"
 
 #include "core/clock_settings.h"
 
 #include "gui/clock_display.h"
 #include "gui/clock_widget.h"
 
+CLOCK_LOGGING_CATEGORY(clock_core_plugins, "clock.core.plugins")
+
 namespace digital_clock {
 namespace core {
 
 PluginManager::PluginManager(QObject* parent) : QObject(parent)
 {
+  cTraceFunction(clock_core_plugins);
 #ifdef Q_OS_MACOS
   search_paths_.append(qApp->applicationDirPath() + "/../PlugIns");
 #else
@@ -46,6 +50,7 @@ PluginManager::PluginManager(QObject* parent) : QObject(parent)
   search_paths_.append("/usr/local/share/digital_clock/plugins");
   search_paths_.append(QDir::homePath() + "/.local/share/digital_clock/plugins");
 #endif
+  qCDebug(clock_core_plugins) << "search paths:" << search_paths_;
   timer_.setInterval(500);
   timer_.setSingleShot(false);
   timer_.start();
@@ -53,16 +58,19 @@ PluginManager::PluginManager(QObject* parent) : QObject(parent)
 
 PluginManager::~PluginManager()
 {
+  cTraceFunction(clock_core_plugins);
   timer_.stop();
 }
 
 void PluginManager::SetInitData(const TPluginData& data)
 {
+  cTraceFunction(clock_core_plugins);
   data_ = data;
 }
 
 void PluginManager::ListAvailable()
 {
+  cTraceSlot(clock_core_plugins);
   available_.clear();
   QList<QPair<TPluginInfo, bool> > plugins;
   for (auto& path : search_paths_) {
@@ -99,11 +107,13 @@ void PluginManager::ListAvailable()
 
 void PluginManager::LoadPlugins(const QStringList& names)
 {
+  cTraceSlot(clock_core_plugins);
   for (auto& name : names) LoadPlugin(name);
 }
 
 void PluginManager::UnloadPlugins(const QStringList& names)
 {
+  cTraceSlot(clock_core_plugins);
   if (!names.isEmpty()) {
     for (auto& name : names) UnloadPlugin(name);
   } else {
@@ -118,11 +128,13 @@ void PluginManager::UnloadPlugins(const QStringList& names)
 
 void PluginManager::EnablePlugin(const QString& name, bool enable)
 {
+  cTraceSlot(clock_core_plugins);
   enable ? LoadPlugin(name) : UnloadPlugin(name);
 }
 
 void PluginManager::ConfigurePlugin(const QString& name)
 {
+  cTraceSlot(clock_core_plugins);
   auto iter = loaded_.find(name);
   if (iter != loaded_.end()) {
     IClockPlugin* plugin = qobject_cast<IClockPlugin*>(iter.value()->instance());
@@ -150,12 +162,15 @@ void PluginManager::ConfigurePlugin(const QString& name)
 
 void PluginManager::LoadPlugin(const QString& name)
 {
+  cTraceFunction(clock_core_plugins);
   if (loaded_.contains(name)) return;
   QString file = available_[name];
   if (!QFile::exists(file)) return;
+  qCDebug(clock_core_plugins) << "loading plugin:" << name << file;
   QPluginLoader* loader = new QPluginLoader(file, this);
   IClockPlugin* plugin = qobject_cast<IClockPlugin*>(loader->instance());
   if (plugin) {
+    qCDebug(clock_core_plugins) << "starting plugin:" << name;
     QJsonObject metadata = loader->metaData().value("MetaData").toObject();
     if (metadata.value("configurable").toBool()) {
       plugin->InitSettings(data_.settings->GetBackend());
@@ -163,26 +178,32 @@ void PluginManager::LoadPlugin(const QString& name)
     InitPlugin(plugin, true);
     plugin->Start();
     loaded_[name] = loader;
+    qCDebug(clock_core_plugins) << "plugin start completed:" << name;
   }
 }
 
 void PluginManager::UnloadPlugin(const QString& name)
 {
+  cTraceFunction(clock_core_plugins);
   auto iter = loaded_.find(name);
   if (iter == loaded_.end()) return;
   QPluginLoader* loader = iter.value();
   Q_ASSERT(loader);
+  qCDebug(clock_core_plugins) << "unloading plugin:" << name;
   IClockPlugin* plugin = qobject_cast<IClockPlugin*>(loader->instance());
   if (plugin) {
+    qCDebug(clock_core_plugins) << "stopping plugin:" << name;
     disconnect(&timer_, SIGNAL(timeout()), plugin, SLOT(TimeUpdateListener()));
     plugin->Stop();
     loader->unload();
     loaded_.erase(iter);
+    qCDebug(clock_core_plugins) << "plugin stop completed:" << name;
   }
 }
 
 void PluginManager::InitPlugin(IClockPlugin* plugin, bool connected)
 {
+  cTraceFunction(clock_core_plugins);
   // connect slots which are common for all plugins
   if (connected) {
     connect(&timer_, SIGNAL(timeout()), plugin, SLOT(TimeUpdateListener()));

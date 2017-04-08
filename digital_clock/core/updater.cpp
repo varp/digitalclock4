@@ -22,11 +22,16 @@
 #include <QJsonObject>
 #include <QCoreApplication>
 
+#include "logger.h"
+
 #include "core/build_defs.h"
 #include "core/clock_state.h"
 #include "core/http_client.h"
 
 #define S_OPT_LAST_UPDATE       "last_update"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_core_updater)
+CLOCK_LOGGING_CATEGORY(clock_core_updater_timer, "clock.core.updater.timer")
 
 namespace digital_clock {
 namespace core {
@@ -46,10 +51,12 @@ Updater::Updater(ClockState* state, QObject* parent) :
   check_beta_(false), autoupdate_(true), update_period_(3),
   force_update_(false), was_error_(false)
 {
+  cTraceFunction(clock_core_updater);
   last_update_ = state_->GetVariable(S_OPT_LAST_UPDATE, QDate(2013, 6, 18)).value<QDate>();
   downloader_ = new HttpClient(this);
   connect(downloader_, &HttpClient::ErrorMessage, [=] (const QString& msg) {
     was_error_ = true;
+    qCWarning(clock_core_updater) << "connection failed:" << msg;
     emit ErrorMessage(msg);
   });
   connect(downloader_, &HttpClient::DataDownloaded, [=] (const QByteArray& data) { data_.append(data); });
@@ -58,42 +65,50 @@ Updater::Updater(ClockState* state, QObject* parent) :
 
 Updater::~Updater()
 {
+  cTraceFunction(clock_core_updater);
   if (downloader_->isRunning()) downloader_->cancel();
 }
 
 void Updater::CheckForUpdates()
 {
+  cTraceSlot(clock_core_updater);
   RunCheckForUpdates(true);
 }
 
 void Updater::SetCheckForBeta(bool check)
 {
+  cTraceSlot(clock_core_updater);
   check_beta_ = check;
 }
 
 void Updater::SetAutoupdate(bool update)
 {
+  cTraceSlot(clock_core_updater);
   autoupdate_ = update;
 }
 
 void Updater::SetUpdatePeriod(int period)
 {
+  cTraceSlot(clock_core_updater);
   update_period_ = period;
 }
 
 void Updater::TimeoutHandler()
 {
+  cTraceSlot(clock_core_updater_timer);
   if (!autoupdate_ || (downloader_ && downloader_->isRunning())) return;
   if (last_update_.daysTo(QDate::currentDate()) >= update_period_) RunCheckForUpdates(false);
 }
 
 void Updater::ProcessData()
 {
+  cTraceSlot(clock_core_updater);
   if (was_error_) return;
   QJsonParseError err;
   QJsonDocument js_doc = QJsonDocument::fromJson(data_, &err);
   if (err.error != QJsonParseError::NoError) {
     was_error_ = true;
+    qCWarning(clock_core_updater) << "parser error:" << err.errorString();
     emit ErrorMessage(err.errorString());
     return;
   }
@@ -111,6 +126,9 @@ void Updater::ProcessData()
     }
   }
 
+  qCInfo(clock_core_updater) << "current:" << QCoreApplication::applicationVersion() << QLatin1String(c_build_date);
+  qCInfo(clock_core_updater) << "latest :" << latest << last_build;
+
   if (latest > QCoreApplication::applicationVersion() ||
       QDate::fromString(QLatin1String(c_build_date), "dd-MM-yyyy") < last_build) {
     latest = QString("%1, %2").arg(latest).arg(last_build.toString(Qt::DefaultLocaleShortDate));
@@ -124,6 +142,7 @@ void Updater::ProcessData()
 
 void Updater::RunCheckForUpdates(bool force)
 {
+  cTraceFunction(clock_core_updater);
   force_update_ = force;
   was_error_ = false;
   data_.clear();

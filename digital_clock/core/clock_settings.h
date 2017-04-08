@@ -32,6 +32,7 @@ class ClockSettings : public ConfigBase
 {
 public:
   explicit ClockSettings(SettingsStorage* backend, QObject* parent = 0);
+  ~ClockSettings();
 
   // temporary added only for compatibility
   // TODO: remove
