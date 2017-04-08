@@ -59,7 +59,7 @@
 #define S_OPT_POSITION              "clock_position"
 
 CLOCK_LOGGING_CATEGORY(clock_gui_widgets, "clock.gui.widgets")
-CLOCK_LOGGING_CATEGORY(clock_main_timer, "clock.main_timer")
+CLOCK_LOGGING_CATEGORY(clock_main_timer, "clock.main.timer")
 
 namespace digital_clock {
 

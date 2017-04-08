@@ -22,9 +22,11 @@
 #include <QIcon>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QLoggingCategory>
 
 int main(int argc, char* argv[])
 {
+  QLoggingCategory::setFilterRules("clock.*.debug=false");
   // set application info
   QApplication::setApplicationDisplayName("Digital Clock");
   QApplication::setApplicationName("Digital Clock");

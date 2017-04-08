@@ -26,6 +26,7 @@
 #include "logger.h"
 
 CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_main_timer)
 
 namespace digital_clock {
 namespace gui {
@@ -84,7 +85,7 @@ QAction* TrayControl::GetShowHideAction() const
 
 void TrayControl::UpdateTrayIcon()
 {
-  cTraceSlot(clock_gui_widgets);
+  cTraceSlot(clock_main_timer);
 #ifdef Q_OS_MACOS
   // macOS dark panel support
   QSettings s;

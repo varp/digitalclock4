@@ -25,7 +25,8 @@
 #endif
 #include "logger.h"
 
-CLOCK_LOGGING_CATEGORY(clock_core_updater, "clock.core.updater")
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_core_updater)
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_core_updater_timer)
 
 namespace digital_clock {
 namespace core {
@@ -75,7 +76,7 @@ void HttpClient::startRequest(QUrl url)
 
 bool HttpClient::isRunning() const
 {
-  cTraceFunction(clock_core_updater);
+  cTraceFunction(clock_core_updater_timer);
   return is_running_;
 }
 

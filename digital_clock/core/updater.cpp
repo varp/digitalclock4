@@ -30,7 +30,7 @@
 
 #define S_OPT_LAST_UPDATE       "last_update"
 
-CLOCK_DECLARE_LOGGING_CATEGORY(clock_core_updater)
+CLOCK_LOGGING_CATEGORY(clock_core_updater, "clock.core.updater")
 CLOCK_LOGGING_CATEGORY(clock_core_updater_timer, "clock.core.updater.timer")
 
 namespace digital_clock {
