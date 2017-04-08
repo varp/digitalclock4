@@ -23,11 +23,16 @@
 #include <QApplication>
 #include <QSettings>
 
+#include "logger.h"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
+
 namespace digital_clock {
 namespace gui {
 
 TrayControl::TrayControl(QWidget* parent) : QObject(parent)
 {
+  cTraceFunction(clock_gui_widgets);
   QMenu* tray_menu = new QMenu(parent);
   // *INDENT-OFF*
   show_hide_action_ = tray_menu->addAction(QIcon(":/clock/images/clock.svg"), tr("&Hide Clock"),
@@ -60,18 +65,26 @@ TrayControl::TrayControl(QWidget* parent) : QObject(parent)
           this, SLOT(TrayEventHandler(QSystemTrayIcon::ActivationReason)));
 }
 
+TrayControl::~TrayControl()
+{
+  cTraceFunction(clock_gui_widgets);
+}
+
 QSystemTrayIcon* TrayControl::GetTrayIcon() const
 {
+  cTraceFunction(clock_gui_widgets);
   return tray_icon_;
 }
 
 QAction* TrayControl::GetShowHideAction() const
 {
+  cTraceFunction(clock_gui_widgets);
   return show_hide_action_;
 }
 
 void TrayControl::UpdateTrayIcon()
 {
+  cTraceSlot(clock_gui_widgets);
 #ifdef Q_OS_MACOS
   // macOS dark panel support
   QSettings s;
@@ -90,11 +103,13 @@ void TrayControl::UpdateTrayIcon()
 
 void TrayControl::TrayEventHandler(QSystemTrayIcon::ActivationReason reason)
 {
+  cTraceSlot(clock_gui_widgets);
   if (reason == QSystemTrayIcon::DoubleClick) emit ShowSettingsDlg();
 }
 
 void TrayControl::ShowHideHandler()
 {
+  cTraceSlot(clock_gui_widgets);
   Q_ASSERT(show_hide_action_);
   bool widget_will_visible = show_hide_action_->data().toBool();
   if (widget_will_visible) {

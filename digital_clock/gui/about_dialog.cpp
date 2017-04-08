@@ -21,7 +21,11 @@
 
 #include <QDate>
 
+#include "logger.h"
+
 #include "core/build_defs.h"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
 
 namespace digital_clock {
 namespace gui {
@@ -60,6 +64,7 @@ AboutDialog::AboutDialog(QWidget* parent) :
   QDialog(parent),
   ui(new Ui::AboutDialog)
 {
+  cTraceFunction(clock_gui_widgets);
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowIcon(QIcon(":/clock/images/about.svg"));
@@ -78,6 +83,7 @@ AboutDialog::AboutDialog(QWidget* parent) :
 
 AboutDialog::~AboutDialog()
 {
+  cTraceFunction(clock_gui_widgets);
   delete ui;
 }
 

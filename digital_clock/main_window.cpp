@@ -31,6 +31,7 @@
 #include <QDesktopServices>
 
 #include "settings_storage.h"
+#include "logger.h"
 
 #include "core/clock_settings.h"
 #include "core/clock_state.h"
@@ -57,6 +58,8 @@
 
 #define S_OPT_POSITION              "clock_position"
 
+CLOCK_LOGGING_CATEGORY(clock_gui_widgets, "clock.gui.widgets")
+CLOCK_LOGGING_CATEGORY(clock_main_timer, "clock.main_timer")
 
 namespace digital_clock {
 

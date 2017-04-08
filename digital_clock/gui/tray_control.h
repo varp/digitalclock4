@@ -33,6 +33,8 @@ class TrayControl : public QObject
 
 public:
   explicit TrayControl(QWidget* parent = 0);
+  ~TrayControl();
+
   QSystemTrayIcon* GetTrayIcon() const;
   QAction* GetShowHideAction() const;
 

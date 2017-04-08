@@ -30,6 +30,7 @@
 
 #include "skin_drawer.h"
 #include "settings_storage.h"
+#include "logger.h"
 
 #include "core/autostart.h"
 #include "core/clock_settings.h"
@@ -47,6 +48,8 @@
 #define DEFAULT_TEXTURE_PATH              (QApplication::applicationDirPath() + "/textures")
 #endif
 
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
+
 using skin_draw::SkinDrawer;
 
 namespace digital_clock {
@@ -63,6 +66,7 @@ SettingsDialog::SettingsDialog(core::ClockSettings* config, core::ClockState* st
   ui(new Ui::SettingsDialog),
   config_(config), state_(state)
 {
+  cTraceFunction(clock_gui_widgets);
   ui->setupUi(this);
 
   setAttribute(Qt::WA_DeleteOnClose);
@@ -99,11 +103,13 @@ SettingsDialog::SettingsDialog(core::ClockSettings* config, core::ClockState* st
 
 SettingsDialog::~SettingsDialog()
 {
+  cTraceFunction(clock_gui_widgets);
   delete ui;
 }
 
 void SettingsDialog::SetSkinList(const QStringList& skins)
 {
+  cTraceSlot(clock_gui_widgets);
   this->blockSignals(true);
   ui->skin_box->clear();
   ui->skin_box->addItems(skins);
@@ -113,6 +119,7 @@ void SettingsDialog::SetSkinList(const QStringList& skins)
 
 void SettingsDialog::DisplaySkinInfo(const core::BaseSkin::TSkinInfo& info)
 {
+  cTraceSlot(clock_gui_widgets);
   using core::BaseSkin;
   if (info[BaseSkin::SI_NAME] == "Text Skin") return;
   BaseSkin::TSkinInfo l_info = info;
@@ -125,6 +132,7 @@ void SettingsDialog::DisplaySkinInfo(const core::BaseSkin::TSkinInfo& info)
 
 void SettingsDialog::SetPluginsList(const QList<QPair<TPluginInfo, bool> >& plugins)
 {
+  cTraceSlot(clock_gui_widgets);
   ui->plugins_list->clear();
   QList<QPair<TPluginInfo, bool> > sorted_plugins = plugins;
   std::sort(sorted_plugins.begin(), sorted_plugins.end(), plugin_info_cmp);
@@ -148,12 +156,14 @@ void SettingsDialog::SetPluginsList(const QList<QPair<TPluginInfo, bool> >& plug
 
 void SettingsDialog::showEvent(QShowEvent* e)
 {
+  cTraceFunction(clock_gui_widgets);
   QDialog::showEvent(e);
   LoadState();
 }
 
 void SettingsDialog::InitControls()
 {
+  cTraceSlot(clock_gui_widgets);
   Q_ASSERT(config_);
   this->blockSignals(true);
 
@@ -258,6 +268,7 @@ void SettingsDialog::InitControls()
 
 void SettingsDialog::ChangePluginState(const QString& name, bool activated)
 {
+  cTraceSlot(clock_gui_widgets);
   if (activated)
     active_plugins_.append(name);
   else
@@ -267,12 +278,14 @@ void SettingsDialog::ChangePluginState(const QString& name, bool activated)
 
 void SettingsDialog::SaveState()
 {
+  cTraceSlot(clock_gui_widgets);
   state_->SetVariable(S_OPT_LAST_TIME_FORMAT_KEY, ui->format_box->currentText());
   state_->SetVariable(S_OPT_GEOMETRY_KEY, saveGeometry());
 }
 
 void SettingsDialog::LoadState()
 {
+  cTraceSlot(clock_gui_widgets);
   QVariant last_format = state_->GetVariable(S_OPT_LAST_TIME_FORMAT_KEY);
   if (last_format.isValid()) ui->format_box->setCurrentText(last_format.toString());
   QVariant last_geometry = state_->GetVariable(S_OPT_GEOMETRY_KEY);

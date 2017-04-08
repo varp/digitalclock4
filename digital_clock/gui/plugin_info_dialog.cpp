@@ -19,6 +19,10 @@
 #include "plugin_info_dialog.h"
 #include "ui_plugin_info_dialog.h"
 
+#include "logger.h"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
+
 namespace digital_clock {
 namespace gui {
 
@@ -26,6 +30,7 @@ PluginInfoDialog::PluginInfoDialog(QWidget* parent) :
   QDialog(parent),
   ui(new Ui::PluginInfoDialog)
 {
+  cTraceFunction(clock_gui_widgets);
   ui->setupUi(this);
 
   setAttribute(Qt::WA_DeleteOnClose);
@@ -34,11 +39,13 @@ PluginInfoDialog::PluginInfoDialog(QWidget* parent) :
 
 PluginInfoDialog::~PluginInfoDialog()
 {
+  cTraceFunction(clock_gui_widgets);
   delete ui;
 }
 
 void PluginInfoDialog::SetInfo(const TPluginInfo& info)
 {
+  cTraceSlot(clock_gui_widgets);
   ui->name_value->setText(info.gui_info.display_name);
   ui->version_value->setText(tr("version: %1").arg(info.metadata[PI_VERSION]));
   if (info.gui_info.icon.isNull()) ui->icon_label->hide();

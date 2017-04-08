@@ -21,16 +21,21 @@
 #include <QGridLayout>
 #include <QVariant>
 
+#include "logger.h"
 #include "skin_drawer.h"
 
 #include "gui/clock_display.h"
 #include "gui/colorize_effect.h"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_main_timer)
 
 namespace digital_clock {
 namespace gui {
 
 ClockWidget::ClockWidget(QWidget* parent) : QWidget(parent)
 {
+  cTraceFunction(clock_gui_widgets);
   display_ = new ClockDisplay(this);
   QGridLayout* main_layout = new QGridLayout(this);
   main_layout->addWidget(display_);
@@ -50,19 +55,27 @@ ClockWidget::ClockWidget(QWidget* parent) : QWidget(parent)
   preview_mode_ = false;
 }
 
+ClockWidget::~ClockWidget()
+{
+  cTraceFunction(clock_gui_widgets);
+}
+
 ClockDisplay* ClockWidget::GetDisplay() const
 {
+  cTraceFunction(clock_gui_widgets);
   return display_;
 }
 
 void ClockWidget::ApplySkin(skin_draw::ISkin::SkinPtr skin)
 {
+  cTraceSlot(clock_gui_widgets);
   skin->SetDevicePixelRatio(this->devicePixelRatioF());
   drawer_->ApplySkin(skin);
 }
 
 void ClockWidget::ApplyOption(Option option, const QVariant& value)
 {
+  cTraceSlot(clock_gui_widgets);
   switch (option) {
     case OPT_SEPARATOR_FLASH:
       display_->SetSeparatorFlash(value.toBool());
@@ -158,28 +171,33 @@ void ClockWidget::ApplyOption(Option option, const QVariant& value)
 
 void ClockWidget::EnablePreviewMode()
 {
+  cTraceSlot(clock_gui_widgets);
   preview_mode_ = true;
   drawer_->SetPreviewMode(true);
 }
 
 void ClockWidget::DisablePreviewMode()
 {
+  cTraceSlot(clock_gui_widgets);
   preview_mode_ = false;
   drawer_->SetPreviewMode(false);
 }
 
 void ClockWidget::TimeoutHandler()
 {
+  cTraceSlot(clock_main_timer);
   display_->TimeoutHandler();
 }
 
 void ClockWidget::Update()
 {
+  cTraceSlot(clock_main_timer);
   this->adjustSize();
 }
 
 void ClockWidget::DrawImage(const QImage& image)
 {
+  cTraceSlot(clock_main_timer);
   if (colorize_enabled_) {
     QImage dst_image;
     colorize_image(image, dst_image, colorize_color_, colorize_level_);

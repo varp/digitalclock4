@@ -24,6 +24,11 @@
 #include <QMouseEvent>
 #include <QDesktopServices>
 
+#include "logger.h"
+
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_gui_widgets)
+CLOCK_DECLARE_LOGGING_CATEGORY(clock_main_timer)
+
 namespace digital_clock {
 namespace gui {
 
@@ -32,15 +37,18 @@ ClockDisplay::ClockDisplay(QWidget* parent) :
   sep_visible_(false), sep_flashes_(true), url_enabled_(false),
   local_time_(true), time_zone_(QTimeZone::systemTimeZone())
 {
+  cTraceFunction(clock_gui_widgets);
   setAlignment(Qt::AlignCenter);
 }
 
 ClockDisplay::~ClockDisplay()
 {
+  cTraceFunction(clock_gui_widgets);
 }
 
 void ClockDisplay::DrawImage(const QImage& image)
 {
+  cTraceSlot(clock_main_timer);
   setPixmap(QPixmap::fromImage(image));
   adjustSize();
   emit changed();
@@ -48,12 +56,14 @@ void ClockDisplay::DrawImage(const QImage& image)
 
 void ClockDisplay::SetSeparatorFlash(bool set)
 {
+  cTraceSlot(clock_gui_widgets);
   sep_flashes_ = set;
   sep_visible_ = !set;
 }
 
 void ClockDisplay::SetTimeFormat(const QString& format)
 {
+  cTraceSlot(clock_gui_widgets);
   time_format_ = format;
   seps_ = format;
   seps_.remove(QRegExp("[hmszap]", Qt::CaseInsensitive));
@@ -63,29 +73,34 @@ void ClockDisplay::SetTimeFormat(const QString& format)
 
 void ClockDisplay::SetDisplayLocalTime(bool set)
 {
+  cTraceSlot(clock_gui_widgets);
   local_time_ = set;
   TimeoutHandler();
 }
 
 void ClockDisplay::SetTimeZone(const QTimeZone& tz)
 {
+  cTraceSlot(clock_gui_widgets);
   time_zone_ = tz;
   TimeoutHandler();
 }
 
 void ClockDisplay::SetURLEnabled(bool enable)
 {
+  cTraceSlot(clock_gui_widgets);
   url_enabled_ = enable;
   setCursor(enable ? Qt::PointingHandCursor : Qt::ArrowCursor);
 }
 
 void ClockDisplay::SetURL(const QString& url)
 {
+  cTraceSlot(clock_gui_widgets);
   url_string_ = url;
 }
 
 void ClockDisplay::TimeoutHandler()
 {
+  cTraceSlot(clock_main_timer);
   if (time_format_.isEmpty()) {
     QString sys_time_format = QLocale::system().timeFormat();
     int sep_pos = sys_time_format.indexOf(':');
@@ -117,6 +132,7 @@ void ClockDisplay::TimeoutHandler()
 
 void ClockDisplay::mousePressEvent(QMouseEvent* event)
 {
+  cTraceFunction(clock_gui_widgets);
   if (event->button() == Qt::LeftButton) {
     drag_position_ = event->globalPos();
   }
@@ -125,6 +141,7 @@ void ClockDisplay::mousePressEvent(QMouseEvent* event)
 
 void ClockDisplay::mouseReleaseEvent(QMouseEvent* event)
 {
+  cTraceFunction(clock_gui_widgets);
   if (url_enabled_ && event->button() == Qt::LeftButton &&
       event->globalPos() == drag_position_) {
     QDesktopServices::openUrl(url_string_);
