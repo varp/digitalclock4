@@ -320,31 +320,135 @@
     </message>
     <message>
         <location filename="../gui/settings_dialog.ui" line="853"/>
+        <source>Logging</source>
+        <translation>Логирование</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="859"/>
+        <source>Log level</source>
+        <translation>Детализация лога</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="865"/>
+        <source>no any log messages will produced</source>
+        <translation>ничего не логировать</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="868"/>
+        <source>disabled</source>
+        <translation>отключено</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="875"/>
+        <source>log only important messages (errors and warnings)</source>
+        <translation>логировать только важные сообщения (ошибки и предупреждения)</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="878"/>
+        <source>very basic</source>
+        <translation>минимально</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="885"/>
+        <source>log any messages</source>
+        <translation>логировать любые сообщения</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="888"/>
+        <source>basic debug</source>
+        <translation>базовая отладка</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="895"/>
+        <source>log almost all functions calls (except periodically called)</source>
+        <translation>логировать вызовы почти всех функций (за исключением периодически вызываемых)</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="898"/>
+        <source>full debug</source>
+        <translation>полная отладка</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="905"/>
+        <source>log all functions calls.
+Warning: a lot of functions are called too often, log file can be very huge.
+Use it with caution.</source>
+        <translation>логировать вызовы всех функций.
+Внимание: многие функции вызываются слишком часто, файл лога может быть очень большим.
+Используйте с осторожностью.</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="910"/>
+        <source>extra debug</source>
+        <translation>экстра отладка</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="917"/>
+        <source>apply custom log filter</source>
+        <translation>применить пользовательский фильтр</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="920"/>
+        <source>custom filter</source>
+        <translation>другой фильтр</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="933"/>
+        <source>Custom filter</source>
+        <translation>Пользовательский фильтр</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="945"/>
+        <source>Log file settings</source>
+        <translation>Настройки лог-файла</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="953"/>
+        <source>Log files path:</source>
+        <translation>Папка для логов:</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="977"/>
+        <source>delete old logs</source>
+        <translation>удалять предыдущие логи</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="987"/>
+        <source>number of log files to keep:</source>
+        <translation>количество предыдущих логов:</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="1021"/>
+        <source>Restart the application for the changes to take effect!</source>
+        <translation>Перезапустите приложение чтобы изменения вступили в силу!</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.ui" line="1032"/>
         <source>Experimental</source>
         <translation>Экспериментальные</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.ui" line="866"/>
+        <location filename="../gui/settings_dialog.ui" line="1045"/>
         <source>show clock on all workspaces/virtual desktops</source>
         <translation>показывать часы на всех рабочих столах</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.ui" line="873"/>
+        <location filename="../gui/settings_dialog.ui" line="1052"/>
         <source>better &apos;stay on top&apos; for Linux</source>
         <translation>альтернативный режим &apos;поверх всех окон&apos;</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.ui" line="880"/>
+        <location filename="../gui/settings_dialog.ui" line="1059"/>
         <source>always keep clock visible on screen, prevent out of sceen postion</source>
         <translation>всегда держать часы видимыми на экране, избегать положения вне экрана</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.ui" line="893"/>
+        <location filename="../gui/settings_dialog.ui" line="1072"/>
         <source>Please restart clock after changing any of theese options!</source>
         <translation>Пожалуйста перезапустите часы после изменения любой из данных опций!</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.ui" line="913"/>
+        <location filename="../gui/settings_dialog.ui" line="1092"/>
         <source>There are experimental features on this tab. They are disabled by default. Enabling and using them is totally safe for computer, but it can lead to undefined clock behaviour. Try them as you want, but any testing is welcome. If you will notice strange behaviour after enabling any of theese options, please let me know about it. Contact information can be found in &apos;About&apos; dialog.</source>
         <translation>На этой вкладке представлены экспериментальные опции. По умолчанию они отключены. Их включение и использование полностью безопасно для Вашего компьютера, но они могут привести к непредсказуемому поведению часов. Пробуйте их если хотите, но любое тестирование только приветствуется. Если после включения любой из данных опций Вы заметите некорректное поведение часов, пожалуйста сообщите мне об этом. Контактную информацию можно найти в окошке &apos;О программе&apos;.</translation>
     </message>
@@ -406,7 +510,7 @@
         <translation>Выбрать локальный файл вместо URL</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.ui" line="859"/>
+        <location filename="../gui/settings_dialog.ui" line="1038"/>
         <source>prevent appearing above fullscreen windows</source>
         <translation>не появляться поверх полноэкранных окон</translation>
     </message>
@@ -426,55 +530,60 @@
         <translation>Плагины</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="229"/>
+        <location filename="../gui/settings_dialog.cpp" line="230"/>
         <source>1 day</source>
         <translation>1 день</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="230"/>
+        <location filename="../gui/settings_dialog.cpp" line="231"/>
         <source>3 days</source>
         <translation>3 дня</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="231"/>
+        <location filename="../gui/settings_dialog.cpp" line="232"/>
         <source>1 week</source>
         <translation>1 неделя</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="232"/>
+        <location filename="../gui/settings_dialog.cpp" line="233"/>
         <source>2 weeks</source>
         <translation>2 недели</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="127"/>
+        <location filename="../gui/settings_dialog.cpp" line="128"/>
         <source>unknown</source>
         <translation>неизвестно</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="346"/>
+        <location filename="../gui/settings_dialog.cpp" line="375"/>
         <source>Open texture file</source>
         <translation>Открыть файл текстуры</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="348"/>
+        <location filename="../gui/settings_dialog.cpp" line="377"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.tiff *.xbm *.xpm)</source>
         <translation>Картинки (*.bmp *.jpg *.jpeg *.png *.tiff *.xbm *.xpm)</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="431"/>
+        <location filename="../gui/settings_dialog.cpp" line="460"/>
         <source>Export settings to ...</source>
         <translation>Экспортировать настройки в ...</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="433"/>
-        <location filename="../gui/settings_dialog.cpp" line="441"/>
+        <location filename="../gui/settings_dialog.cpp" line="462"/>
+        <location filename="../gui/settings_dialog.cpp" line="470"/>
         <source>Digital Clock settings files (*.dcs)</source>
         <translation>файлы конфигурации Digital Clock</translation>
     </message>
     <message>
-        <location filename="../gui/settings_dialog.cpp" line="439"/>
+        <location filename="../gui/settings_dialog.cpp" line="468"/>
         <source>Import settings from ...</source>
         <translation>Импортировать настройки из ...</translation>
+    </message>
+    <message>
+        <location filename="../gui/settings_dialog.cpp" line="601"/>
+        <source>Log Directory</source>
+        <translation>Папка для логов</translation>
     </message>
 </context>
 <context>

@@ -19,6 +19,7 @@
 #ifndef DIGITAL_CLOCK_CORE_CLOCK_LOGGER_H
 #define DIGITAL_CLOCK_CORE_CLOCK_LOGGER_H
 
+#include <QFile>
 #include <QString>
 #include <QVariant>
 
@@ -48,9 +49,15 @@ public:
   static QVariant value(LoggerOption opt);
   static void setValue(LoggerOption opt, const QVariant& value);
 
+  static void init();
+
 private:
+  static void logFileOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+
   static QString key(LoggerOption opt);
   static QVariant defaultValue(LoggerOption opt);
+
+  static QFile log_file_;
 };
 
 } // namespace core

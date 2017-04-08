@@ -22,11 +22,11 @@
 #include <QIcon>
 #include <QTranslator>
 #include <QLibraryInfo>
-#include <QLoggingCategory>
+
+#include "core/clock_logger.h"
 
 int main(int argc, char* argv[])
 {
-  QLoggingCategory::setFilterRules("clock.*.debug=false");
   // set application info
   QApplication::setApplicationDisplayName("Digital Clock");
   QApplication::setApplicationName("Digital Clock");
@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
   // set application attributes
   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+  digital_clock::core::Logger::init();
 
   QApplication app(argc, argv);
   app.setWindowIcon(QIcon(":/clock/images/clock.svg"));
