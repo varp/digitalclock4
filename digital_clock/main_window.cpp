@@ -65,6 +65,7 @@ namespace digital_clock {
 
 MainWindow::MainWindow(QWidget* parent) : QWidget(parent, Qt::Window)
 {
+  cTraceFunction(clock_gui_widgets);
   setWindowFlags(Qt::FramelessWindowHint);
 #ifdef Q_OS_MACOS
   setWindowFlags(windowFlags() | Qt::NoDropShadowWindowHint);
@@ -131,18 +132,21 @@ MainWindow::MainWindow(QWidget* parent) : QWidget(parent, Qt::Window)
 
 MainWindow::~MainWindow()
 {
+  cTraceFunction(clock_gui_widgets);
   timer_.stop();
   delete state_;
 }
 
 void MainWindow::showEvent(QShowEvent* event)
 {
+  cTraceFunction(clock_gui_widgets);
   SetVisibleOnAllDesktops(app_config_->GetValue(OPT_SHOW_ON_ALL_DESKTOPS).toBool());
   QWidget::showEvent(event);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
 {
+  cTraceFunction(clock_gui_widgets);
   if (event->button() == Qt::LeftButton) {
     drag_position_ = event->globalPos() - frameGeometry().topLeft();
     event->accept();
@@ -151,6 +155,7 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
+  cTraceFunction(clock_gui_widgets);
   if (event->buttons() & Qt::LeftButton) {
     move(event->globalPos() - drag_position_);
     event->accept();
@@ -159,6 +164,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
 
 void MainWindow::mouseReleaseEvent(QMouseEvent* event)
 {
+  cTraceFunction(clock_gui_widgets);
   if (event->button() == Qt::LeftButton) {
     QPoint last_pos = this->pos();
     if (cur_alignment_ == CAlignment::A_RIGHT) {
@@ -182,6 +188,7 @@ void MainWindow::paintEvent(QPaintEvent* /*event*/)
 
 void MainWindow::Reset()
 {
+  cTraceSlot(clock_gui_widgets);
   // widnow settings
   ApplyOption(OPT_OPACITY, app_config_->GetValue(OPT_OPACITY));
   ApplyOption(OPT_FULLSCREEN_DETECT, app_config_->GetValue(OPT_FULLSCREEN_DETECT));
@@ -232,6 +239,7 @@ void MainWindow::Reset()
 
 void MainWindow::ApplyOption(const Option opt, const QVariant& value)
 {
+  cTraceSlot(clock_gui_widgets);
   switch (opt) {
     case OPT_OPACITY:
       setWindowOpacity(value.toReal());
@@ -307,6 +315,7 @@ void MainWindow::ApplyOption(const Option opt, const QVariant& value)
 
 void MainWindow::EnsureVisible()
 {
+  cTraceSlot(clock_gui_widgets);
   last_visibility_ = this->isVisible();
   if (!this->isVisible()) this->setVisible(true);
   tray_control_->GetShowHideAction()->setDisabled(true);
@@ -314,12 +323,14 @@ void MainWindow::EnsureVisible()
 
 void MainWindow::RestoreVisibility()
 {
+  cTraceSlot(clock_gui_widgets);
   this->setVisible(last_visibility_);
   tray_control_->GetShowHideAction()->setEnabled(true);
 }
 
 void MainWindow::LoadState()
 {
+  cTraceSlot(clock_gui_widgets);
   QPoint last_pos = state_->GetVariable(S_OPT_POSITION, QPoint(50, 20)).toPoint();
 
   CAlignment last_align = static_cast<CAlignment>(app_config_->GetValue(OPT_ALIGNMENT).toInt());
@@ -333,6 +344,7 @@ void MainWindow::LoadState()
 
 void MainWindow::SaveState()
 {
+  cTraceSlot(clock_gui_widgets);
   QPoint last_pos = this->pos();
   if (cur_alignment_ == CAlignment::A_RIGHT) {
     last_pos.setX(this->frameGeometry().right());
@@ -342,6 +354,7 @@ void MainWindow::SaveState()
 
 void MainWindow::ShowSettingsDialog()
 {
+  cTraceSlot(clock_gui_widgets);
   this->activateWindow();
   this->raise();
   static QPointer<gui::SettingsDialog> dlg;
@@ -389,6 +402,7 @@ void MainWindow::ShowSettingsDialog()
 
 void MainWindow::ShowAboutDialog()
 {
+  cTraceSlot(clock_gui_widgets);
   static QPointer<gui::AboutDialog> dlg;
   if (!dlg) {
     dlg = new gui::AboutDialog();
@@ -400,11 +414,13 @@ void MainWindow::ShowAboutDialog()
 
 void MainWindow::ShowContextMenu(const QPoint& p)
 {
+  cTraceSlot(clock_gui_widgets);
   tray_control_->GetTrayIcon()->contextMenu()->exec(this->mapToParent(p));
 }
 
 void MainWindow::Update()
 {
+  cTraceSlot(clock_main_timer);
   if (cur_alignment_ == CAlignment::A_RIGHT) {
     int old_width = this->frameGeometry().width();
     this->adjustSize();
@@ -441,6 +457,7 @@ void MainWindow::Update()
 
 void MainWindow::InitPluginSystem()
 {
+  cTraceSlot(clock_gui_widgets);
   plugin_manager_ = new core::PluginManager(this);
   plugin_manager_->ListAvailable();
 
@@ -454,11 +471,13 @@ void MainWindow::InitPluginSystem()
 
 void MainWindow::ShutdownPluginSystem()
 {
+  cTraceSlot(clock_gui_widgets);
   plugin_manager_->UnloadPlugins();
 }
 
 void MainWindow::ConnectTrayMessages()
 {
+  cTraceFunction(clock_gui_widgets);
   // updater messages
   connect(updater_, &core::Updater::ErrorMessage, [this] (const QString& msg) {
     disconnect(tray_control_->GetTrayIcon(), &QSystemTrayIcon::messageClicked, 0, 0);
@@ -504,6 +523,7 @@ void MainWindow::ConnectTrayMessages()
 
 void MainWindow::SetWindowFlag(Qt::WindowFlags flag, bool set)
 {
+  cTraceFunction(clock_gui_widgets);
   QWidget* aw = QApplication::activeWindow();
   Qt::WindowFlags flags = windowFlags();
   set ? flags |= flag : flags &= ~flag;
@@ -515,6 +535,7 @@ void MainWindow::SetWindowFlag(Qt::WindowFlags flag, bool set)
 
 void MainWindow::CorrectPosition()
 {
+  cTraceFunction(clock_main_timer);
   if (!keep_always_visible_) return;
   QPoint curr_pos = this->pos();
   QDesktopWidget* desktop = QApplication::desktop();
@@ -527,6 +548,7 @@ void MainWindow::CorrectPosition()
 
 void MainWindow::SetVisibleOnAllDesktops(bool set)
 {
+  cTraceFunction(clock_gui_widgets);
   // http://stackoverflow.com/questions/16775352/keep-a-application-window-always-on-current-desktop-on-linux-and-mac/
 #if defined(Q_OS_MACOS)
   WId windowObject = this->winId();
