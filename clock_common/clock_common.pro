@@ -44,6 +44,7 @@ HEADERS += \
     config_base.h \
     iclock_plugin.h \
     iplugin_init.h \
+    logger.h \
     message_box.h \
     plugin_base.h \
     plugin_settings.h \
