@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>415</height>
+    <width>581</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -848,6 +848,185 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="logging_tab">
+      <attribute name="title">
+       <string>Logging</string>
+      </attribute>
+      <layout class="QGridLayout" name="logging_layout">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="log_level_group">
+         <property name="title">
+          <string>Log level</string>
+         </property>
+         <layout class="QVBoxLayout" name="log_level_layout">
+          <item>
+           <widget class="QRadioButton" name="log_disabled_rbtn">
+            <property name="toolTip">
+             <string>no any log messages will produced</string>
+            </property>
+            <property name="text">
+             <string>disabled</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="log_very_basic_rbtn">
+            <property name="toolTip">
+             <string>log only important messages (errors and warnings)</string>
+            </property>
+            <property name="text">
+             <string>very basic</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="log_basic_debug_rbtn">
+            <property name="toolTip">
+             <string>log any messages</string>
+            </property>
+            <property name="text">
+             <string>basic debug</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="log_full_debug_rbtn">
+            <property name="toolTip">
+             <string>log almost all functions calls (except periodically called)</string>
+            </property>
+            <property name="text">
+             <string>full debug</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="log_extra_debug_rbtn">
+            <property name="toolTip">
+             <string>log all functions calls.
+Warning: a lot of functions are called too often, log file can be very huge.
+Use it with caution.</string>
+            </property>
+            <property name="text">
+             <string>extra debug</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="log_custom_filter_rbtn">
+            <property name="toolTip">
+             <string>apply custom log filter</string>
+            </property>
+            <property name="text">
+             <string>custom filter</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="custom_filter_group">
+         <property name="title">
+          <string>Custom filter</string>
+         </property>
+         <layout class="QVBoxLayout" name="custom_filter_layout">
+          <item>
+           <widget class="QPlainTextEdit" name="log_custom_filter_edit"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="log_file_settings_group">
+         <property name="title">
+          <string>Log file settings</string>
+         </property>
+         <layout class="QVBoxLayout" name="log_file_settings_layout">
+          <item>
+           <layout class="QHBoxLayout" name="log_path_layout">
+            <item>
+             <widget class="QLabel" name="log_file_label">
+              <property name="text">
+               <string>Log files path:</string>
+              </property>
+              <property name="buddy">
+               <cstring>log_file_path_edit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="log_file_path_edit"/>
+            </item>
+            <item>
+             <widget class="QToolButton" name="log_file_browse_btn">
+              <property name="text">
+               <string notr="true">...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="log_cout_layout" stretch="1,0,0">
+            <item>
+             <widget class="QCheckBox" name="delete_old_logs">
+              <property name="text">
+               <string>delete old logs</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="old_logs_count_label">
+              <property name="text">
+               <string>number of log files to keep:</string>
+              </property>
+              <property name="buddy">
+               <cstring>old_logs_count_edit</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="old_logs_count_edit">
+              <property name="minimum">
+               <number>2</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Restart the application for the changes to take effect!</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="experimental_tab">
       <attribute name="title">
        <string>Experimental</string>
@@ -1169,7 +1348,7 @@
      <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>549</x>
+     <x>546</x>
      <y>101</y>
     </hint>
    </hints>
@@ -1213,12 +1392,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>87</x>
-     <y>323</y>
+     <x>100</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>195</x>
-     <y>324</y>
+     <x>290</x>
+     <y>322</y>
     </hint>
    </hints>
   </connection>
@@ -1229,12 +1408,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>323</y>
+     <x>100</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>548</x>
-     <y>322</y>
+     <x>545</x>
+     <y>319</y>
     </hint>
    </hints>
   </connection>
@@ -1251,6 +1430,54 @@
     <hint type="destinationlabel">
      <x>406</x>
      <y>387</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>log_custom_filter_rbtn</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>custom_filter_group</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>242</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>257</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delete_old_logs</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>old_logs_count_label</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>342</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delete_old_logs</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>old_logs_count_edit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>223</x>
+     <y>354</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>352</y>
     </hint>
    </hints>
   </connection>

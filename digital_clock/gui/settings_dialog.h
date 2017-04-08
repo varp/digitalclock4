@@ -122,6 +122,8 @@ private slots:
   void on_change_time_zone_cbx_clicked(bool checked);
   void on_time_zone_box_activated(int index);
 
+  void on_log_file_browse_btn_clicked();
+
 private:
   Ui::SettingsDialog* ui;
 

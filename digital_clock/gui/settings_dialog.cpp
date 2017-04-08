@@ -33,6 +33,7 @@
 #include "logger.h"
 
 #include "core/autostart.h"
+#include "core/clock_logger.h"
 #include "core/clock_settings.h"
 #include "core/clock_state.h"
 
@@ -281,6 +282,19 @@ void SettingsDialog::SaveState()
   cTraceSlot(clock_gui_widgets);
   state_->SetVariable(S_OPT_LAST_TIME_FORMAT_KEY, ui->format_box->currentText());
   state_->SetVariable(S_OPT_GEOMETRY_KEY, saveGeometry());
+  // save logger settings
+  using core::Logger;
+  if (ui->log_disabled_rbtn->isChecked()) Logger::setValue(Logger::loLogLevel, static_cast<int>(Logger::Disabled));
+  if (ui->log_very_basic_rbtn->isChecked()) Logger::setValue(Logger::loLogLevel, static_cast<int>(Logger::VeryBasic));
+  if (ui->log_basic_debug_rbtn->isChecked()) Logger::setValue(Logger::loLogLevel, static_cast<int>(Logger::BasicDebug));
+  if (ui->log_full_debug_rbtn->isChecked()) Logger::setValue(Logger::loLogLevel, static_cast<int>(Logger::FullDebug));
+  if (ui->log_extra_debug_rbtn->isChecked()) Logger::setValue(Logger::loLogLevel, static_cast<int>(Logger::ExtraDebug));
+  if (ui->log_custom_filter_rbtn->isChecked()) Logger::setValue(Logger::loLogLevel, static_cast<int>(Logger::CustomFilter));
+
+  Logger::setValue(Logger::loCustomFilter, ui->log_custom_filter_edit->toPlainText().split('\n', QString::SkipEmptyParts));
+  Logger::setValue(Logger::loLogDir, QDir::fromNativeSeparators(ui->log_file_path_edit->text()));
+  Logger::setValue(Logger::loDeleteOldLogs, ui->delete_old_logs->isChecked());
+  Logger::setValue(Logger::loOldLogsCount, ui->old_logs_count_edit->value());
 }
 
 void SettingsDialog::LoadState()
@@ -290,6 +304,21 @@ void SettingsDialog::LoadState()
   if (last_format.isValid()) ui->format_box->setCurrentText(last_format.toString());
   QVariant last_geometry = state_->GetVariable(S_OPT_GEOMETRY_KEY);
   if (last_geometry.isValid()) restoreGeometry(last_geometry.toByteArray());
+  // load logger settings
+  using core::Logger;
+  Logger::LogLevel cur_log_level = static_cast<Logger::LogLevel>(Logger::value(Logger::loLogLevel).toInt());
+  ui->log_disabled_rbtn->setChecked(cur_log_level == Logger::Disabled);
+  ui->log_very_basic_rbtn->setChecked(cur_log_level == Logger::VeryBasic);
+  ui->log_basic_debug_rbtn->setChecked(cur_log_level == Logger::BasicDebug);
+  ui->log_full_debug_rbtn->setChecked(cur_log_level == Logger::FullDebug);
+  ui->log_extra_debug_rbtn->setChecked(cur_log_level == Logger::ExtraDebug);
+  ui->log_custom_filter_rbtn->setChecked(cur_log_level == Logger::CustomFilter);
+
+  ui->log_custom_filter_edit->setPlainText(Logger::value(Logger::loCustomFilter).toStringList().join('\n'));
+  ui->log_file_path_edit->setText(QDir::toNativeSeparators(Logger::value(Logger::loLogDir).toString()));
+  ui->log_file_path_edit->setToolTip(ui->log_file_path_edit->text());
+  ui->delete_old_logs->setChecked(Logger::value(Logger::loDeleteOldLogs).toBool());
+  ui->old_logs_count_edit->setValue(Logger::value(Logger::loOldLogsCount).toInt());
 }
 
 void SettingsDialog::on_stay_on_top_toggled(bool checked)
@@ -565,4 +594,12 @@ void digital_clock::gui::SettingsDialog::on_keep_always_visible_clicked(bool che
 void digital_clock::gui::SettingsDialog::on_time_zone_box_activated(int index)
 {
   emit OptionChanged(OPT_TIME_ZONE, ui->time_zone_box->itemData(index, Qt::UserRole).toByteArray());
+}
+
+void digital_clock::gui::SettingsDialog::on_log_file_browse_btn_clicked()
+{
+  QString log_dir = QFileDialog::getExistingDirectory(this, tr("Log Directory"), QDir::homePath());
+  if (log_dir.isEmpty()) return;
+  ui->log_file_path_edit->setText(QDir::toNativeSeparators(log_dir));
+  ui->log_file_path_edit->setToolTip(ui->log_file_path_edit->text());
 }
