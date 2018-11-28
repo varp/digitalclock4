@@ -32,6 +32,7 @@ SOURCES += \
     countdown_timer_plugin.cpp \
     core/countdown_timer.cpp \
     core/settings.cpp \
+    core/timers_settings_storage.cpp \
     core/utilities.cpp \
     gui/settings_dialog.cpp
 
@@ -39,6 +40,7 @@ HEADERS += \
     countdown_timer_plugin.h \
     core/countdown_timer.h \
     core/settings.h \
+    core/timers_settings_storage.h \
     core/utilities.h \
     gui/settings_dialog.h
 

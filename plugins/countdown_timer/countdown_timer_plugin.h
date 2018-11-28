@@ -24,6 +24,7 @@
 namespace countdown_timer {
 
 class CountdownTimer;
+class TimersSettingsStorage;
 
 class CountdownTimerPlugin : public ::plugin::WidgetPluginBase
 {
@@ -32,6 +33,7 @@ class CountdownTimerPlugin : public ::plugin::WidgetPluginBase
 
 public:
   CountdownTimerPlugin();
+  void InitSettings(SettingsStorage* backend, const QString& name) override;
 
 public slots:
   void Start() override;
@@ -51,6 +53,7 @@ private slots:
 
 private:
   CountdownTimer* cd_timer_;
+  TimersSettingsStorage* storage_;
 };
 
 } // namespace countdown_timer

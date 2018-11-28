@@ -26,6 +26,7 @@
 
 #include "core/countdown_timer.h"
 #include "core/settings.h"
+#include "core/timers_settings_storage.h"
 #include "core/utilities.h"
 #include "gui/settings_dialog.h"
 
@@ -37,6 +38,12 @@ CountdownTimerPlugin::CountdownTimerPlugin() : cd_timer_(nullptr)
   info_.display_name = tr("Countdown timer");
   info_.description = tr("Just a countdown timer.");
   InitIcon(":/countdown_timer/icon.svg.p");
+}
+
+void CountdownTimerPlugin::InitSettings(SettingsStorage* backend, const QString& name)
+{
+  storage_ = new TimersSettingsStorage(backend, name, this);
+  IClockPlugin::InitSettings(backend, name);
 }
 
 void CountdownTimerPlugin::Start()
